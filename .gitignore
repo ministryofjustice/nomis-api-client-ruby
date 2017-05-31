@@ -1,4 +1,5 @@
 *.env
 *.gem
 coverage
-.byebug
+.byebug_history
+

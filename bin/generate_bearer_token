@@ -28,7 +28,7 @@ end
 
 raise usage unless ARGV.size == 2
 
-token = NOMIS::API::AuthToken.new(client_token_file: $1, client_key_file: $2).bearer_token
+token = NOMIS::API::AuthToken.new(client_token_file: ARGV[0], client_key_file: ARGV[1]).bearer_token
 puts token
 
 
