@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby 
 #
 # Usage:
-# generate_bearer_token client_key_file client_token_file
+# generate_bearer_token client_token_file client_key_file
 #
 
 require 'nomis_api_client_ruby'
@@ -9,7 +9,7 @@ require 'nomis_api_client_ruby'
 def usage
   output = <<-END
   Usage:
-    generate_bearer_token client_key_file client_token_file
+    generate_bearer_token client_token_file client_key_file
   
   Useful environment variables:
 
@@ -21,14 +21,14 @@ def usage
     'iat skew too large', you can provide this to bring your system
     time within +/-10s of the API gateway.
     e.g.
-     NOMIS_API_IAT_FUDGE_FACTOR=-5 generate_bearer_token ~/my.key ~/my.token
+     NOMIS_API_IAT_FUDGE_FACTOR=-5 generate_bearer_token /path/to/my.token /path/to/my.key 
 
 END
 end
 
 raise usage unless $ARGV.size == 2
 
-token = NOMIS::API::AuthToken.new(client_key_file: $1, client_token_file: $2).bearer_token
+token = NOMIS::API::AuthToken.new(client_token_file: $1, client_key_file: $2).bearer_token
 puts token
 
 

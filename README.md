@@ -5,6 +5,18 @@ A minimal client for the [NOMIS API](http://ministryofjustice.github.io/nomis-ap
 
 ## Installation
 
+### Without bundler
+
+Pre-requisites:
+- ruby
+- rubygems
+
+```bash
+  gem install nomis-api-client  
+```
+
+### With bundler
+
 1. In your Gemfile, add:
 ```ruby
 gem 'nomis-api-client'
@@ -63,11 +75,12 @@ You can generate a bearer token without making a request as follows:
 ```ruby
   # Manually generating a bearer token
   NOMIS::API::AuthToken.new(client_key: 'your client key', client_token: 'your client token').bearer_token
+```
 
 There is also a command-line executable:
 
 ```bash
-  generate_bearer_token /path/to/your.key /path/to/your.token
+  generate_bearer_token /path/to/your.token /path/to/your.key
 ```
 
 ### Environment (preprod/prod)
