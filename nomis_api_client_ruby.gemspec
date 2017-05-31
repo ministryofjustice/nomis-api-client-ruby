@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'nomis-api-client'
-  s.version     = '0.0.7'
+  s.version     = '0.0.8'
   s.date        = '2017-06-01'
   s.summary     = "Minimal Ruby client for the NOMIS API"
   s.description = "A minimal Ruby client for the [NOMIS API](http://ministryofjustice.github.io/nomis-api/)"
