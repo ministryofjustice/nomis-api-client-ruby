@@ -1,1 +1,1 @@
-require_relative './nomis/api'
+require 'nomis/api'

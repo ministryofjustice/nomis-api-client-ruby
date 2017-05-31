@@ -64,6 +64,12 @@ You can generate a bearer token without making a request as follows:
   # Manually generating a bearer token
   NOMIS::API::AuthToken.new(client_key: 'your client key', client_token: 'your client token').bearer_token
 
+There is also a command-line executable:
+
+```bash
+  generate_bearer_token /path/to/your.key /path/to/your.token
+```
+
 ### Environment (preprod/prod)
 
 The NOMIS API has two endpoints avaiable:

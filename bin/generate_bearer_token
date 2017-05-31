@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby 
+#
+# Usage:
+# generate_bearer_token client_key_file client_token_file
+#
+
+require 'nomis_api_client_ruby'
+
+def usage
+  output = <<-END
+  Usage:
+    generate_bearer_token client_key_file client_token_file
+  
+  Useful environment variables:
+
+  NOMIS_API_IAT_FUDGE_FACTOR
+  - a positive/negative integer adjustment which will be added to 
+    the current time to generate the 'iat' timestamp for the 
+    token
+    If you recieve an error message from the api saying
+    'iat skew too large', you can provide this to bring your system
+    time within +/-10s of the API gateway.
+    e.g.
+     NOMIS_API_IAT_FUDGE_FACTOR=-5 generate_bearer_token ~/my.key ~/my.token
+
+END
+end
+
+raise usage unless $ARGV.size == 2
+
+token = NOMIS::API::AuthToken.new(client_key_file: $1, client_token_file: $2).bearer_token
+puts token
+
+

@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'jwt'
-gem 'openssl'
+gem 'jwt', '>= 1.5.6'
+gem 'openssl', '>= 2.0.3'
