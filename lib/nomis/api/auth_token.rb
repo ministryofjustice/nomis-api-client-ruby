@@ -6,7 +6,7 @@ module NOMIS
   module API
     # Encapsulates the complexity of generating a JWT bearer token
     class AuthToken
-      attr_accessor :client_token, :client_key, :iat_fudge_factor
+      attr_accessor :client_token, :client_key, :iat_fudge_factor, :now
 
       # iat_fudge_factor allows you to correct for time drift between your
       # client and the target server.
@@ -29,14 +29,12 @@ module NOMIS
       def bearer_token
         validate_keys!
 
-        auth_token = JWT.encode(payload, client_key, 'ES256')
-
         "Bearer #{auth_token}"
       end
 
       def payload
         {
-          iat: Time.now.to_i + iat_fudge_factor,
+          iat: current_timestamp + iat_fudge_factor,
           token: client_token
         }
       end
@@ -47,26 +45,44 @@ module NOMIS
       # error message can only say that the generated JWT token does not
       # validate.
       def validate_keys!
-        client_pub = OpenSSL::PKey::EC.new client_key
-        client_pub.private_key = nil
-        client_pub_base64 = Base64.strict_encode64(client_pub.to_der)
-
-        expected_client_pub = JWT.decode(client_token, nil, nil)[0]['key']
-
-        unless client_pub_base64 == expected_client_pub
-          raise 'Incorrect private key supplied ' \
-                + '(does not match public key within token)'
+        unless client_public_key_base64 == expected_client_public_key
+          raise TokenMismatchError, 
+                'Incorrect private key supplied ' \
+                + '(does not match public key within token)',
+                caller
         end
       end
 
       protected
 
-      def default_client_key(params={})
-        read_client_key_file(params[:client_key_file] || ENV['NOMIS_API_CLIENT_KEY_FILE'])
+      def auth_token
+        JWT.encode(payload, client_key, 'ES256')
+      end
+
+      def client_public_key_base64
+        client_public_key = OpenSSL::PKey::EC.new client_key
+        client_public_key.private_key = nil
+        Base64.strict_encode64(client_public_key.to_der)
+      end
+
+      def expected_client_public_key
+        JWT.decode(client_token, nil, nil)[0]['key']
+      end
+
+      def current_timestamp
+        now || Time.now.to_i
+      end
+
+      def default_client_key(params = {})
+        read_client_key_file(
+          params[:client_key_file] || ENV['NOMIS_API_CLIENT_KEY_FILE']
+        )
       end
       
-      def default_client_token(params={})
-        read_client_key_file(params[:client_token_file] || ENV['NOMIS_API_CLIENT_TOKEN_FILE'])
+      def default_client_token(params = {})
+        read_client_key_file(
+          params[:client_token_file] || ENV['NOMIS_API_CLIENT_TOKEN_FILE']
+        )
       end
 
       def default_iat_fudge_factor(params={})

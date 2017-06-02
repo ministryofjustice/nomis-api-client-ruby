@@ -1,7 +1,6 @@
 require 'uri'
 require 'net/http'
 require 'pp'
-require 'byebug'
 
 require 'nomis/api/auth_token'
 require 'nomis/api/parsed_response'

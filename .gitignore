@@ -2,4 +2,4 @@
 *.gem
 coverage
 .byebug_history
-
+.bundle
