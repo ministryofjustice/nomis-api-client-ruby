@@ -27,7 +27,7 @@ gem 'nomis-api-client'
 bundle install
 ```
 
-## Usage
+## Configuration
 
 ### Authentication
 
@@ -101,6 +101,12 @@ or the environment variable NOMIS_API_BASE_URL:
   export NOMIS_API_BASE_URL='https://noms-api.service.justice.gov.uk/nomisapi/'
 ```
 
+## Loading the gem
+
+Assuming you have the gem installed and the path in your $LOAD_PATH (this is simplest if you have bundler installed, and your bundle includes nomis-api-client), you can load the gem code with:
+```ruby
+require 'nomis/api'
+```
 
 ## Making a request
 
