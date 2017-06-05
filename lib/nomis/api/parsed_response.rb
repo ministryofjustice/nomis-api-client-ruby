@@ -9,12 +9,18 @@ module NOMIS
 
       def initialize(raw_response)
         self.raw_response = raw_response
-        self.data = JSON.parse(raw_response.body)
+        self.data = parse(raw_response)
       end
 
       def body
         raw_response.body
       end
+
+      def parse(response)
+        response.content_type == 'application/json' ? \
+            JSON.parse(response.body) : response.body
+      end
+
       def status
         raw_response.code
       end
