@@ -74,15 +74,13 @@ module NOMIS
       end
 
       def default_client_key(params = {})
-        read_client_key_file(
-          params[:client_key_file] || ENV['NOMIS_API_CLIENT_KEY_FILE']
-        )
+        path = params[:client_key_file] || ENV['NOMIS_API_CLIENT_KEY_FILE']
+        path ? read_client_key_file(path) : nil
       end
       
       def default_client_token(params = {})
-        read_client_key_file(
-          params[:client_token_file] || ENV['NOMIS_API_CLIENT_TOKEN_FILE']
-        )
+        path = params[:client_token_file] || ENV['NOMIS_API_CLIENT_TOKEN_FILE']
+        path ? read_client_key_file(path) : nil
       end
 
       def default_iat_fudge_factor(params={})
