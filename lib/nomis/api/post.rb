@@ -11,13 +11,14 @@ module NOMIS
     # Manages defaulting of params from env vars,
     # and parsing the returned JSON
     class Post
-      attr_accessor :params, :auth_token, :base_url, :path
+      attr_accessor :params, :auth_token, :base_url, :path, :disable_ssl_verify
 
       def initialize(opts={})
         self.auth_token = opts[:auth_token] || default_auth_token(opts)
         self.base_url   = opts[:base_url] || ENV['NOMIS_API_BASE_URL']
         self.params = opts[:params]
         self.path = opts[:path]
+        self.disable_ssl_verify = opts[:disable_ssl_verify]
       end
 
       def execute
@@ -41,6 +42,7 @@ module NOMIS
       def post_response(req)
         http = Net::HTTP.new(req.uri.hostname, req.uri.port)
         http.use_ssl = (req.uri.scheme == 'https')
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE if disable_ssl_verify
         req.body = params.to_json
         http.request(req)
       end
